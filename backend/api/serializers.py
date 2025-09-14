@@ -1,4 +1,4 @@
-from .models import CustomUser
+from .models import CustomUser, Movie
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -43,3 +43,8 @@ class UserLoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials!")    
+    
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'description', 'duration', 'image', 'created_at']

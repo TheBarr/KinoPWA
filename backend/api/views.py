@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import *
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, SAFE_METHODS
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
+from .serializers import *
+from .models import Movie
 
 class UserRegistrationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
@@ -54,3 +55,13 @@ class UserInfoAPIView(RetrieveAPIView):
     
     def get_object(self):
         return self.request.user
+    
+
+class MovieViewSet(viewsets.ModelViewSet):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return [AllowAny()]
+        return [IsAdminUser()]
