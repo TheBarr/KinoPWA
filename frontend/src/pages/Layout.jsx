@@ -14,6 +14,9 @@ export default function Layout() {
 					<li>
 						<Link to="/register">Register</Link>
 					</li>
+					<li>
+						<Link to="/movies">Movies</Link>
+					</li>
 				</ul>
 			</nav>
 			<Outlet />

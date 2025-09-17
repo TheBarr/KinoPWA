@@ -65,3 +65,8 @@ class MovieViewSet(viewsets.ModelViewSet):
         if self.request.method in SAFE_METHODS:
             return [AllowAny()]
         return [IsAdminUser()]
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
