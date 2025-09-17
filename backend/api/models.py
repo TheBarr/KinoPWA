@@ -14,7 +14,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=200, verbose_name="Tytuł")
     description = models.TextField(verbose_name="Opis")
     duration = models.IntegerField(verbose_name="Czas trwania (minuty)")
-    image = models.ImageField(upload_to='media/movies/', null=True, blank=True, verbose_name="Plakat")
+    image = models.ImageField(upload_to='movies/', null=True, blank=True, verbose_name="Plakat")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Data dodania")
 
     class Meta:

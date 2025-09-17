@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./movies.css";
+import "../styles/movies.css";
 
 const Movies = () => {
 	const [movies, setMovies] = useState([]);
