@@ -1,9 +1,9 @@
 import Logo from "./Logo";
 import Nav from "./Nav";
 
-export const Header = () => {
+const Header = () => {
 	return (
-		<header className="bg-dark-bckground top-0 z-[20] mx-auto flex w-full items-center justify-between border-gray-500 p-6 flex-wrap border-2">
+		<header className="sticky top-0 z-20 mx-auto flex w-full items-center justify-between bg-gray-700 p-1 flex-wrap">
 			<Logo />
 			<Nav />
 		</header>
