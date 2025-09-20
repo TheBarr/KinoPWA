@@ -54,12 +54,12 @@ export default function Login() {
 	};
 
 	return (
-		<div className="flex justify-center items-start h-screen bg-gray-600 pt-20">
+		<div className="flex justify-center items-start h-[calc(100vh-148px)] bg-gray-600 pt-20">
 			<div className="w-96 p-6 shadow-lg bg-white rounded-md">
-				<p className="flex justify-center font-bold">
-					{error && <p style={{ color: "red" }}>{error}</p>}
-					{successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-				</p>
+				<div className="flex justify-center font-bold mb-4">
+					{error && <p className="text-red-500">{error}</p>}
+					{successMessage && <p className="text-green-500">{successMessage}</p>}
+				</div>
 
 				<h1 className="text-3xl flex items-center justify-center gap-2 font-semibold">
 					<User className="w-8 h-8" />
