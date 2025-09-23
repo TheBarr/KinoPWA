@@ -19,6 +19,7 @@ export default function Login() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [successMessage, setSuccessMessage] = useState(null);
 	const [error, setError] = useState(null);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (isLoading) {

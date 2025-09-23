@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import axios from "axios";
@@ -7,6 +7,36 @@ const Nav = () => {
 	const navigate = useNavigate();
 
 	const [isOpen, setIsOpen] = useState(false);
+	const [username, setUsername] = useState("");
+	const [isLoggedIn, setLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const checkLoggedInUser = async () => {
+			try {
+				const token = localStorage.getItem("accessToken");
+				if (token) {
+					const config = {
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					};
+					const response = await axios.get(
+						"http://127.0.0.1:8000/api/user/",
+						config
+					);
+					setLoggedIn(true);
+					setUsername(response.data.username);
+				} else {
+					setLoggedIn(false);
+					setUsername("");
+				}
+			} catch (error) {
+				setLoggedIn(false);
+				setUsername("");
+			}
+		};
+		checkLoggedInUser();
+	}, []);
 
 	const toggleNavbar = () => {
 		setIsOpen(!isOpen);
@@ -30,6 +60,8 @@ const Nav = () => {
 				);
 				localStorage.removeItem("accessToken");
 				localStorage.removeItem("refreshToken");
+				setLoggedIn(false);
+				setUsername("");
 				console.log("Log out successful!");
 				navigate("/login");
 			}
@@ -52,33 +84,39 @@ const Nav = () => {
 					}>
 					Movies
 				</NavLink>
-				<NavLink
-					to="/login"
-					className={({ isActive }) =>
-						`px-3 py-2 rounded transition-colors ${
-							isActive
-								? "text-amber-400 font-semibold bg-gray-600"
-								: "text-white hover:text-amber-400 hover:bg-gray-600"
-						}`
-					}>
-					Login
-				</NavLink>
-				<NavLink
-					to="/register"
-					className={({ isActive }) =>
-						`px-3 py-2 rounded transition-colors ${
-							isActive
-								? "text-amber-400 font-semibold bg-gray-600"
-								: "text-white hover:text-amber-400 hover:bg-gray-600"
-						}`
-					}>
-					Register
-				</NavLink>
-				<button
-					onClick={handleLogout}
-					className="px-3 py-2 rounded transition-colors text-white hover:text-amber-400 hover:bg-gray-600 cursor-pointer">
-					Logout
-				</button>
+				{!isLoggedIn && (
+					<>
+						<NavLink
+							to="/login"
+							className={({ isActive }) =>
+								`px-3 py-2 rounded transition-colors ${
+									isActive
+										? "text-amber-400 font-semibold bg-gray-600"
+										: "text-white hover:text-amber-400 hover:bg-gray-600"
+								}`
+							}>
+							Login
+						</NavLink>
+						<NavLink
+							to="/register"
+							className={({ isActive }) =>
+								`px-3 py-2 rounded transition-colors ${
+									isActive
+										? "text-amber-400 font-semibold bg-gray-600"
+										: "text-white hover:text-amber-400 hover:bg-gray-600"
+								}`
+							}>
+							Register
+						</NavLink>
+					</>
+				)}
+				{isLoggedIn && (
+					<button
+						onClick={handleLogout}
+						className="px-3 py-2 rounded transition-colors text-white hover:text-amber-400 hover:bg-gray-600 cursor-pointer">
+						Logout
+					</button>
+				)}
 			</>
 		);
 	};

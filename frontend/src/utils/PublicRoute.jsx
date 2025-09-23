@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-function ProtectedRoute({ children }) {
+function PublicRoute({ children }) {
 	const [isAuthorized, setIsAuthorized] = useState(null);
 
 	useEffect(() => {
@@ -59,7 +59,9 @@ function ProtectedRoute({ children }) {
 		);
 	}
 
-	return isAuthorized ? children : <Navigate to="/login" />;
+	// Jeśli zalogowany - przekieruj na dashboard/home
+	// Jeśli niezalogowany - pokaż login/register
+	return isAuthorized ? <Navigate to="/" /> : children;
 }
 
-export default ProtectedRoute;
+export default PublicRoute;

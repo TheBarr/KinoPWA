@@ -4,24 +4,42 @@ import Layout from "./pages/Layout";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Movies from "./components/Movies";
-import ProtectedRoutes from "./utils/ProtectedRoutes";
+import ProtectedRoute from "./utils/ProtectedRoutes";
+import PublicRoute from "./utils/PublicRoute";
 
 function App() {
 	return (
-		<>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<Layout />}>
-						<Route index element={<Home />} />
-						{/* <Route element={<ProtectedRoutes />}> */}
-						<Route path="movies" element={<Movies />} />
-						{/* </Route> */}
-						<Route path="login" element={<Login />} />
-						<Route path="register" element={<Register />} />
-					</Route>
-				</Routes>
-			</BrowserRouter>
-		</>
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<Layout />}>
+					<Route index element={<Home />} />
+					<Route
+						path="movies"
+						element={
+							<ProtectedRoute>
+								<Movies />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="login"
+						element={
+							<PublicRoute>
+								<Login />
+							</PublicRoute>
+						}
+					/>
+					<Route
+						path="register"
+						element={
+							<PublicRoute>
+								<Register />
+							</PublicRoute>
+						}
+					/>
+				</Route>
+			</Routes>
+		</BrowserRouter>
 	);
 }
 
