@@ -1,28 +1,130 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-
-const NavLinks = () => {
-	return (
-		<>
-			<NavLink to="/login">Login</NavLink>
-			<NavLink to="/register">Register</NavLink>
-			<NavLink to="/movies">Movies</NavLink>
-		</>
-	);
-};
+import axios from "axios";
 
 const Nav = () => {
+	const navigate = useNavigate();
+
 	const [isOpen, setIsOpen] = useState(false);
+	const [username, setUsername] = useState("");
+	const [isLoggedIn, setLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const checkLoggedInUser = async () => {
+			try {
+				const token = localStorage.getItem("accessToken");
+				if (token) {
+					const config = {
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					};
+					const response = await axios.get(
+						"http://127.0.0.1:8000/api/user/",
+						config
+					);
+					setLoggedIn(true);
+					setUsername(response.data.username);
+				} else {
+					setLoggedIn(false);
+					setUsername("");
+				}
+			} catch (error) {
+				setLoggedIn(false);
+				setUsername("");
+			}
+		};
+		checkLoggedInUser();
+	}, []);
 
 	const toggleNavbar = () => {
 		setIsOpen(!isOpen);
 	};
 
+	const handleLogout = async () => {
+		try {
+			const accessToken = localStorage.getItem("accessToken");
+			const refreshToken = localStorage.getItem("refreshToken");
+
+			if (accessToken && refreshToken) {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				};
+				await axios.post(
+					"http://127.0.0.1:8000/api/logout/",
+					{ refresh: refreshToken },
+					config
+				);
+				localStorage.removeItem("accessToken");
+				localStorage.removeItem("refreshToken");
+				setLoggedIn(false);
+				setUsername("");
+				console.log("Log out successful!");
+				navigate("/login");
+			}
+		} catch (error) {
+			console.error("Failed to logout", error.response?.data || error.message);
+		}
+	};
+
+	const NavLinks = () => {
+		return (
+			<>
+				<NavLink
+					to="/movies"
+					className={({ isActive }) =>
+						`px-3 py-2 rounded transition-colors ${
+							isActive
+								? "text-amber-400 font-semibold bg-gray-600"
+								: "text-white hover:text-amber-400 hover:bg-gray-600"
+						}`
+					}>
+					Movies
+				</NavLink>
+				{!isLoggedIn && (
+					<>
+						<NavLink
+							to="/login"
+							className={({ isActive }) =>
+								`px-3 py-2 rounded transition-colors ${
+									isActive
+										? "text-amber-400 font-semibold bg-gray-600"
+										: "text-white hover:text-amber-400 hover:bg-gray-600"
+								}`
+							}>
+							Login
+						</NavLink>
+						<NavLink
+							to="/register"
+							className={({ isActive }) =>
+								`px-3 py-2 rounded transition-colors ${
+									isActive
+										? "text-amber-400 font-semibold bg-gray-600"
+										: "text-white hover:text-amber-400 hover:bg-gray-600"
+								}`
+							}>
+							Register
+						</NavLink>
+					</>
+				)}
+				{isLoggedIn && (
+					<button
+						onClick={handleLogout}
+						className="px-3 py-2 rounded transition-colors text-white hover:text-amber-400 hover:bg-gray-600 cursor-pointer">
+						Logout
+					</button>
+				)}
+			</>
+		);
+	};
+
 	return (
 		<>
 			<nav className="w-1/3 flex justify-end">
-				<div className="hidden w-full justify-between md:flex">
+				<div className="hidden w-full justify-around md:flex">
 					<NavLinks />
 				</div>
 				<div className="md:hidden">
