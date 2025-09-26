@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../utils/AuthContext";
 
 export default function Login() {
 	const navigate = useNavigate();
+	const { login } = useAuth();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -29,16 +30,17 @@ export default function Login() {
 		setIsLoading(true);
 
 		try {
-			const response = await axios.post(
-				"http://127.0.0.1:8000/api/login/",
-				formData
-			);
-			console.log("Success!", response.data);
-			setSuccessMessage("Login Successful!");
-			setError(null);
-			localStorage.setItem("accessToken", response.data.tokens.access);
-			localStorage.setItem("refreshToken", response.data.tokens.refresh);
-			navigate("/");
+			const result = await login(formData);
+
+			if (result.success) {
+				console.log("Success!");
+				setSuccessMessage("Login Successful!");
+				setError(null);
+				navigate("/");
+				console.log("Navigate called"); // ← DODANE
+			} else {
+				throw result.error;
+			}
 		} catch (error) {
 			console.log("Error during Login!", error.response?.data);
 			if (error.response && error.response.data) {
@@ -55,7 +57,8 @@ export default function Login() {
 	};
 
 	return (
-		<div className="flex justify-center items-start h-[calc(100vh-148px)] bg-gray-600 pt-20">
+		//bg-gradient-to-b from-black via-gray-900 to-amber-950
+		<div className="flex justify-center items-start pt-20">
 			<div className="w-96 p-6 shadow-lg bg-white rounded-md">
 				<div className="flex justify-center font-bold mb-4">
 					{error && <p className="text-red-500">{error}</p>}
@@ -99,7 +102,7 @@ export default function Login() {
 							disabled={isLoading}
 							onClick={handleSubmit}
 							type="submit"
-							className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+							className="border-2 border-amber-400 bg-amber-400 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-amber-400 font-semibold cursor-pointer">
 							Login
 						</button>
 					</div>

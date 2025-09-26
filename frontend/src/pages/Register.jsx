@@ -21,6 +21,7 @@ export default function Register() {
 	const [error, setError] = useState(null);
 
 	const handleSubmit = async (e) => {
+		setError(null);
 		console.log(e.data);
 		e.preventDefault();
 		if (isLoading) {
@@ -53,7 +54,7 @@ export default function Register() {
 	};
 
 	return (
-		<div className="flex justify-center items-start h-[calc(100vh-148px)] bg-gray-600 pt-20">
+		<div className="flex justify-center items-start pt-20">
 			<div className="w-96 p-6 shadow-lg bg-white rounded-md">
 				<div className="flex justify-center font-bold mb-4">
 					{error && <p className="text-red-500">{error}</p>}
@@ -123,7 +124,7 @@ export default function Register() {
 							disabled={isLoading}
 							onClick={handleSubmit}
 							type="submit"
-							className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+							className="border-2 border-amber-400 bg-amber-400 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-amber-400 font-semibold cursor-pointer">
 							Register
 						</button>
 					</div>
