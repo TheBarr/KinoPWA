@@ -37,7 +37,6 @@ export default function Login() {
 				setSuccessMessage("Login Successful!");
 				setError(null);
 				navigate("/");
-				console.log("Navigate called"); // ← DODANE
 			} else {
 				throw result.error;
 			}
@@ -57,7 +56,6 @@ export default function Login() {
 	};
 
 	return (
-		//bg-gradient-to-b from-black via-gray-900 to-amber-950
 		<div className="flex justify-center items-start pt-20">
 			<div className="w-96 p-6 shadow-lg bg-white rounded-md">
 				<div className="flex justify-center font-bold mb-4">

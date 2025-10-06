@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from rest_framework.generics import GenericAPIView, RetrieveAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, SAFE_METHODS
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status, viewsets
 from .serializers import *
 from .models import Movie
@@ -70,3 +71,60 @@ class MovieViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+
+#-----------------------------------------------
+    @action(detail=True, methods=['get'])
+    def screenings(self, request, pk=None):
+        movie = self.get_object()
+        screenings = Screening.objects.filter(movie=movie).order_by('start_time')
+        serializer = ScreeningSerializer(screenings, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+# NOWE VIEWS DO BOOKOWANIA:
+
+class ScreeningViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Screening.objects.all()
+    serializer_class = ScreeningSerializer
+    permission_classes = [AllowAny]
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
+    # ENDPOINT: /api/screenings/{id}/seats/
+    @action(detail=True, methods=['get'])
+    def seats(self, request, pk=None):
+        screening = self.get_object()
+        seats = Seat.objects.filter(is_active=True).order_by('row_number', 'seat_number')
+        serializer = SeatSerializer(
+            seats, 
+            many=True, 
+            context={'screening_id': screening.id}
+        )
+        return Response(serializer.data)
+
+class BookingViewSet(viewsets.ModelViewSet):
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
+    
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateBookingSerializer
+        return BookingSerializer
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+# ENDPOINT: /api/my-bookings/ - moje rezerwacje
+class MyBookingsListView(ListAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user).order_by('-booking_time')

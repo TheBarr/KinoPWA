@@ -37,7 +37,7 @@ export default function Register() {
 			);
 			console.log("Success!", response.data);
 			setError(null);
-			setSuccessMessage("Registration Successful!");
+			setSuccessMessage("Registration Successful! You can now login");
 		} catch (error) {
 			console.log("Error during registration!", error.response?.data);
 			if (error.response && error.response.data) {
@@ -131,52 +131,5 @@ export default function Register() {
 				</form>
 			</div>
 		</div>
-
-		// <div>
-		// 	{error && <p style={{ color: "red" }}>{error}</p>}
-		// 	{successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-		// 	<h2>Register:</h2>
-		// 	<form>
-		// 		<label>username:</label>
-		// 		<br />
-		// 		<input
-		// 			type="text"
-		// 			name="username"
-		// 			value={formData.username}
-		// 			onChange={handleChange}></input>{" "}
-		// 		<br />
-		// 		<br />
-		// 		<label>email:</label>
-		// 		<br />
-		// 		<input
-		// 			type="email"
-		// 			name="email"
-		// 			value={formData.email}
-		// 			onChange={handleChange}></input>{" "}
-		// 		<br />
-		// 		<br />
-		// 		<label>password:</label>
-		// 		<br />
-		// 		<input
-		// 			type="password"
-		// 			name="password1"
-		// 			value={formData.password1}
-		// 			onChange={handleChange}></input>{" "}
-		// 		<br />
-		// 		<br />
-		// 		<label>confirm password:</label>
-		// 		<br />
-		// 		<input
-		// 			type="password"
-		// 			name="password2"
-		// 			value={formData.password2}
-		// 			onChange={handleChange}></input>{" "}
-		// 		<br />
-		// 		<br />
-		// 		<button type="submit" disabled={isLoading} onClick={handleSubmit}>
-		// 			Register
-		// 		</button>
-		// 	</form>
-		// </div>
 	);
 }

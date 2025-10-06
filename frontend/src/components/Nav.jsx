@@ -14,8 +14,7 @@ const Nav = () => {
 
 	const handleLogout = async () => {
 		await logout();
-		console.log("Log out successful!");
-		navigate("/login");
+		navigate("/");
 	};
 
 	const NavLinks = () => {
@@ -54,7 +53,17 @@ const Nav = () => {
 						<span className="flex items-center justify-center px-3 py-1 text-amber-400 font-medium text-sm">
 							<b>Witaj, {username}!</b>
 						</span>
-
+						<NavLink
+							to="/my-bookings"
+							className={({ isActive }) =>
+								`px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 border ${
+									isActive
+										? "text-amber-400 bg-amber-400/10 border-amber-400/30 shadow-lg"
+										: "text-gray-100 hover:text-amber-300 hover:bg-amber-400/5 border-transparent hover:border-amber-400/20"
+								}`
+							}>
+							Moje Bilety
+						</NavLink>
 						<NavLink
 							to="/movies"
 							className={({ isActive }) =>
@@ -64,13 +73,13 @@ const Nav = () => {
 										: "text-gray-100 hover:text-amber-300 hover:bg-amber-400/5 border-transparent hover:border-amber-400/20"
 								}`
 							}>
-							Movies
+							Filmy
 						</NavLink>
 
 						<button
 							onClick={handleLogout}
 							className="px-4 py-2 rounded-lg font-medium text-gray-100 hover:text-red-400 hover:bg-red-400/10 transition-all duration-300 transform hover:scale-105 border border-transparent hover:border-red-400/30 cursor-pointer">
-							Logout
+							Wyloguj
 						</button>
 					</>
 				)}

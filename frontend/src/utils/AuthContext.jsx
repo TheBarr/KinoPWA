@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import apiClient from "../utils/axiosConfig";
 
 const AuthContext = createContext();
 
@@ -19,27 +20,31 @@ export const AuthProvider = ({ children }) => {
 	const checkAuthStatus = async () => {
 		try {
 			const token = localStorage.getItem("accessToken");
+
 			if (token) {
-				const config = {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				};
-				const response = await axios.get(
-					"http://127.0.0.1:8000/api/user/",
-					config
-				);
-				setLoggedIn(true);
-				setUsername(response.data.username);
+				if (navigator.onLine) {
+					const response = await apiClient.get("/user/");
+					setLoggedIn(true);
+					setUsername(response.data.username);
+				} else {
+					const savedUsername = localStorage.getItem("username");
+					setLoggedIn(true);
+					setUsername(savedUsername || "Użytkownik");
+				}
 			} else {
 				setLoggedIn(false);
 				setUsername("");
 			}
 		} catch (error) {
-			setLoggedIn(false);
-			setUsername("");
-			localStorage.removeItem("accessToken");
-			localStorage.removeItem("refreshToken");
+			const token = localStorage.getItem("accessToken");
+			if (token) {
+				const savedUsername = localStorage.getItem("username");
+				setLoggedIn(true);
+				setUsername(savedUsername || "Użytkownik");
+			} else {
+				setLoggedIn(false);
+				setUsername("");
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -52,12 +57,17 @@ export const AuthProvider = ({ children }) => {
 				credentials
 			);
 
-			const { tokens, user } = response.data;
+			const { tokens } = response.data;
 			localStorage.setItem("accessToken", tokens.access);
 			localStorage.setItem("refreshToken", tokens.refresh);
 
 			setLoggedIn(true);
-			checkAuthStatus();
+
+			const userResponse = await apiClient.get("/user/");
+			const username = userResponse.data.username;
+			setUsername(username);
+			localStorage.setItem("username", username);
+
 			return { success: true };
 		} catch (error) {
 			return {
@@ -69,20 +79,10 @@ export const AuthProvider = ({ children }) => {
 
 	const logout = async () => {
 		try {
-			const accessToken = localStorage.getItem("accessToken");
 			const refreshToken = localStorage.getItem("refreshToken");
 
-			if (accessToken && refreshToken) {
-				const config = {
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
-				};
-				await axios.post(
-					"http://127.0.0.1:8000/api/logout/",
-					{ refresh: refreshToken },
-					config
-				);
+			if (refreshToken) {
+				await apiClient.post("/logout/", { refresh: refreshToken });
 			}
 		} catch (error) {
 			console.error("Logout error:", error);

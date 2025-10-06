@@ -1,4 +1,4 @@
-from .models import CustomUser, Movie
+from .models import CustomUser, Movie, Screening, Seat, Booking
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -59,3 +59,69 @@ class MovieSerializer(serializers.ModelSerializer):
             else:
                 return obj.image.url
         return None
+    
+#-------------------------------------------------------------------------- miejsca
+
+class SeatSerializer(serializers.ModelSerializer):
+    is_booked = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Seat
+        fields = ['id', 'row_number', 'seat_number', 'is_active', 'is_booked']
+    
+    def get_is_booked(self, obj):
+        screening_id = self.context.get('screening_id')
+        if screening_id:
+            return Booking.objects.filter(
+                screening_id=screening_id,
+                seat=obj,
+                status__in=['confirmed', 'paid']
+            ).exists()
+        return False
+
+class ScreeningSerializer(serializers.ModelSerializer):
+    movie = MovieSerializer(read_only=True)
+    available_seats_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Screening
+        fields = ['id', 'movie', 'start_time', 'price', 'available_seats_count']
+    
+    def get_available_seats_count(self, obj):
+        return obj.available_seats.count()
+
+class BookingSerializer(serializers.ModelSerializer):
+    seat = SeatSerializer(read_only=True)
+    screening = ScreeningSerializer(read_only=True)
+    user = CustomUserSerializer(read_only=True)
+    
+    class Meta:
+        model = Booking
+        fields = ['id', 'user', 'screening', 'seat', 'status', 'booking_time', 'total_price']
+
+class CreateBookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = ['screening', 'seat']
+    
+    def validate(self, data):
+        screening = data['screening']
+        seat = data['seat']
+        
+        if Booking.objects.filter(
+            screening=screening, 
+            seat=seat, 
+            status__in=['confirmed', 'paid']
+        ).exists():
+            raise serializers.ValidationError("To miejsce jest już zajęte")
+        
+        return data
+    
+    def create(self, validated_data):
+        user = self.context['request'].user
+        booking = Booking.objects.create(
+            user=user,
+            status='confirmed',  
+            **validated_data
+        )
+        return booking
