@@ -31,15 +31,56 @@ export default defineConfig({
 				],
 			},
 			workbox: {
+				globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
 				runtimeCaching: [
 					{
-						urlPattern: /^https:\/\/127\.0\.0\.1:8000\/api\/.*/i,
+						// FILMY - StaleWhileRevalidate
+						urlPattern: /^https?:\/\/127\.0\.0\.1:8000\/api\/movies\/$/i,
+						handler: "StaleWhileRevalidate",
+						options: {
+							cacheName: "movies-cache",
+							expiration: {
+								maxEntries: 50,
+								maxAgeSeconds: 60 * 60 * 24, // 1 dzień
+							},
+						},
+					},
+					{
+						// MOJE REZERWACJE - CacheFirst
+						urlPattern:
+							/^https?:\/\/127\.0\.0\.1:8000\/api\/(my-bookings|bookings)\/$/i,
+						handler: "CacheFirst",
+						options: {
+							cacheName: "bookings-cache",
+							expiration: {
+								maxEntries: 30,
+								maxAgeSeconds: 60 * 60 * 24 * 7, // 7 dni
+							},
+						},
+					},
+					{
+						// SEANSE I MIEJSCA - NetworkFirst
+						urlPattern:
+							/^https?:\/\/127\.0\.0\.1:8000\/api\/(screenings|movies\/\d+\/screenings).*$/i,
 						handler: "NetworkFirst",
 						options: {
-							cacheName: "api-cache",
+							cacheName: "screenings-cache",
+							networkTimeoutSeconds: 3, // Po 3 sek pokazuje cache
 							expiration: {
-								maxEntries: 10,
-								maxAgeSeconds: 60 * 60,
+								maxEntries: 50,
+								maxAgeSeconds: 60 * 30, // 30 minut
+							},
+						},
+					},
+					{
+						// OBRAZY - CacheFirst
+						urlPattern: /^https?:\/\/127\.0\.0\.1:8000\/media\/.*/i,
+						handler: "CacheFirst",
+						options: {
+							cacheName: "images-cache",
+							expiration: {
+								maxEntries: 100,
+								maxAgeSeconds: 60 * 60 * 24 * 30, // 30 dni
 							},
 						},
 					},
