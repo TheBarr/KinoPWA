@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import CustomUser, Movie
+from .models import CustomUser, Movie, Seat, Screening, Booking, FCMToken
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
-
 
 @admin.register(CustomUser)
 class CustomAdminUser(UserAdmin):
@@ -39,3 +38,27 @@ class MovieAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )   
+
+
+@admin.register(Seat)
+class SeatAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'is_active']
+    list_filter = ['row_number', 'is_active']
+    ordering = ['row_number', 'seat_number']
+
+@admin.register(Screening)
+class ScreeningAdmin(admin.ModelAdmin):
+    list_display = ['movie', 'start_time', 'price']
+    list_filter = ['start_time', 'movie']
+    search_fields = ['movie__title']
+
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ['user', 'screening', 'seat', 'status', 'booking_time']
+    list_filter = ['status', 'booking_time']
+    search_fields = ['user__email', 'screening__movie__title']
+
+@admin.register(FCMToken)
+class FCMTokenAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at', 'updated_at']
+    search_fields = ['user__email']

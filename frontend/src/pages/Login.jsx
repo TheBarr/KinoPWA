@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../utils/AuthContext";
 
 export default function Login() {
 	const navigate = useNavigate();
+	const { login } = useAuth();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -29,16 +30,16 @@ export default function Login() {
 		setIsLoading(true);
 
 		try {
-			const response = await axios.post(
-				"http://127.0.0.1:8000/api/login/",
-				formData
-			);
-			console.log("Success!", response.data);
-			setSuccessMessage("Login Successful!");
-			setError(null);
-			localStorage.setItem("accessToken", response.data.tokens.access);
-			localStorage.setItem("refreshToken", response.data.tokens.refresh);
-			navigate("/");
+			const result = await login(formData);
+
+			if (result.success) {
+				console.log("Success!");
+				setSuccessMessage("Login Successful!");
+				setError(null);
+				navigate("/");
+			} else {
+				throw result.error;
+			}
 		} catch (error) {
 			console.log("Error during Login!", error.response?.data);
 			if (error.response && error.response.data) {
@@ -55,7 +56,7 @@ export default function Login() {
 	};
 
 	return (
-		<div className="flex justify-center items-start h-[calc(100vh-148px)] bg-gray-600 pt-20">
+		<div className="flex justify-center items-start pt-20">
 			<div className="w-96 p-6 shadow-lg bg-white rounded-md">
 				<div className="flex justify-center font-bold mb-4">
 					{error && <p className="text-red-500">{error}</p>}
@@ -64,7 +65,7 @@ export default function Login() {
 
 				<h1 className="text-3xl flex items-center justify-center gap-2 font-semibold">
 					<User className="w-8 h-8" />
-					Login
+					Logowanie
 				</h1>
 				<hr className="mt-3" />
 				<form onSubmit={handleSubmit}>
@@ -77,20 +78,20 @@ export default function Login() {
 							type="email"
 							name="email"
 							id="email"
-							placeholder="Enter email..."
+							placeholder="Wprowadź email..."
 							value={formData.email}
 							onChange={handleChange}></input>
 					</div>
 					<div className="mt-3">
 						<label htmlFor="password" className="block text-base mb-2">
-							Password
+							Hasło
 						</label>
 						<input
 							className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 							type="password"
 							name="password"
 							id="password"
-							placeholder="Enter password..."
+							placeholder="Wprowadź hasło..."
 							value={formData.password}
 							onChange={handleChange}></input>
 					</div>
@@ -99,7 +100,7 @@ export default function Login() {
 							disabled={isLoading}
 							onClick={handleSubmit}
 							type="submit"
-							className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+							className="border-2 border-amber-400 bg-amber-400 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-amber-400 font-semibold cursor-pointer">
 							Login
 						</button>
 					</div>

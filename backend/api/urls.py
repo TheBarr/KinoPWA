@@ -5,6 +5,9 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'movies', MovieViewSet, basename='movie')
+router.register(r'screenings', ScreeningViewSet, basename='screening')
+router.register(r'bookings', BookingViewSet, basename='booking')
+
 
 urlpatterns = [
     path("register/", UserRegistrationAPIView.as_view(), name="register-user"),
@@ -12,5 +15,8 @@ urlpatterns = [
     path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path("user/", UserInfoAPIView.as_view(), name="user-info"),
+    path("my-bookings/", MyBookingsListView.as_view(), name="my-bookings"),
+    path("notifications/register/", RegisterFCMTokenView.as_view(), name="register-fcm-token"),
+    path('notifications/status/', notification_status, name='notification-status'),
     path('', include(router.urls)),
 ]

@@ -13,9 +13,12 @@ function PublicRoute({ children }) {
 	const refreshToken = async () => {
 		const refreshToken = localStorage.getItem("refreshToken");
 		try {
-			const res = await axios.post("http://127.0.0.1:8000/api/token/refresh/", {
-				refresh: refreshToken,
-			});
+			const res = await axios.post(
+				`${import.meta.env.VITE_API_URL}/token/refresh/`,
+				{
+					refresh: refreshToken,
+				}
+			);
 			if (res.status === 200) {
 				localStorage.setItem("accessToken", res.data.access);
 				setIsAuthorized(true);
