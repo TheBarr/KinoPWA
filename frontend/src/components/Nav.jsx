@@ -33,7 +33,7 @@ const Nav = () => {
 										: "text-gray-100 hover:text-amber-300 hover:bg-amber-400/5 border-transparent hover:border-amber-400/20"
 								}`
 							}>
-							Login
+							Zaloguj
 						</NavLink>
 						<NavLink
 							to="/register"
@@ -44,7 +44,7 @@ const Nav = () => {
 										: "text-gray-100 hover:text-amber-300 hover:bg-amber-400/5 border-transparent hover:border-amber-400/20"
 								}`
 							}>
-							Register
+							Rejestracja
 						</NavLink>
 					</>
 				)}

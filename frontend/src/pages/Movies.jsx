@@ -31,7 +31,7 @@ const Movies = () => {
 		if (imageUrl.startsWith("http")) {
 			return imageUrl;
 		}
-		return `http://127.0.0.1:8000${imageUrl}`;
+		return `${import.meta.env.VITE_APP_URL}${imagePath}`;
 	};
 
 	const handleImageError = (e) => {

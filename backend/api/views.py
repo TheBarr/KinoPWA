@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from rest_framework.generics import GenericAPIView, RetrieveAPIView, ListAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView, ListAPIView, CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, SAFE_METHODS
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework import status, viewsets
 from .serializers import *
 from .models import Movie
@@ -128,3 +128,22 @@ class MyBookingsListView(ListAPIView):
     
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user).order_by('-booking_time')
+
+class RegisterFCMTokenView(CreateAPIView):
+    serializer_class = FCMTokenSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'status': 'Token registered'}, status=status.HTTP_201_CREATED)
+    
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def notification_status(request):
+    has_token = FCMToken.objects.filter(user=request.user).exists()
+    return Response({'has_active_token': has_token})

@@ -65,7 +65,7 @@ export default function Login() {
 
 				<h1 className="text-3xl flex items-center justify-center gap-2 font-semibold">
 					<User className="w-8 h-8" />
-					Login
+					Logowanie
 				</h1>
 				<hr className="mt-3" />
 				<form onSubmit={handleSubmit}>
@@ -78,20 +78,20 @@ export default function Login() {
 							type="email"
 							name="email"
 							id="email"
-							placeholder="Enter email..."
+							placeholder="Wprowadź email..."
 							value={formData.email}
 							onChange={handleChange}></input>
 					</div>
 					<div className="mt-3">
 						<label htmlFor="password" className="block text-base mb-2">
-							Password
+							Hasło
 						</label>
 						<input
 							className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 							type="password"
 							name="password"
 							id="password"
-							placeholder="Enter password..."
+							placeholder="Wprowadź hasło..."
 							value={formData.password}
 							onChange={handleChange}></input>
 					</div>

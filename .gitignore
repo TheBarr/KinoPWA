@@ -219,3 +219,19 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,react,venv
 
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+firebase-credentials.json
+firebase-messaging-sw.js
+config.js
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
+
+
+# PWA
+public/firebase-messaging-sw.js

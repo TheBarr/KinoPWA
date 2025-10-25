@@ -90,3 +90,16 @@ class Booking(models.Model):
         if not self.total_price:
             self.total_price = self.screening.price
         super().save(*args, **kwargs)
+
+class FCMToken(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='fcm_tokens') 
+    token = models.CharField(max_length=500, unique=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Token FCM"
+        verbose_name_plural = "Tokeny FCM"
+    
+    def __str__(self):
+        return f"{self.user.email}"

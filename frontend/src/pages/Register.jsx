@@ -32,7 +32,7 @@ export default function Register() {
 
 		try {
 			const response = await axios.post(
-				"http://127.0.0.1:8000/api/register/",
+				import.meta.env.VITE_API_URL + "/register/",
 				formData
 			);
 			console.log("Success!", response.data);
@@ -63,20 +63,20 @@ export default function Register() {
 
 				<h1 className="text-3xl flex items-center justify-center gap-2 font-semibold">
 					<User className="w-8 h-8" />
-					Register
+					Rejestracja
 				</h1>
 				<hr className="mt-3" />
 				<form onSubmit={handleSubmit}>
 					<div className="mt-3">
 						<label htmlFor="username" className="block text-base mb-2">
-							Username
+							Nazwa
 						</label>
 						<input
 							className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 							type="text"
 							name="username"
 							id="username"
-							placeholder="Enter username..."
+							placeholder="Wprowadź nazwe użytkownika..."
 							value={formData.username}
 							onChange={handleChange}></input>
 					</div>
@@ -89,33 +89,33 @@ export default function Register() {
 							type="email"
 							name="email"
 							id="email"
-							placeholder="Enter email..."
+							placeholder="Wprowadź email..."
 							value={formData.email}
 							onChange={handleChange}></input>
 					</div>
 					<div className="mt-3">
 						<label htmlFor="password1" className="block text-base mb-2">
-							Password
+							Hasło
 						</label>
 						<input
 							className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 							type="password"
 							name="password1"
 							id="password1"
-							placeholder="Enter password..."
+							placeholder="Wprowadź hasło..."
 							value={formData.password1}
 							onChange={handleChange}></input>
 					</div>
 					<div className="mt-3">
 						<label htmlFor="password2" className="block text-base mb-2">
-							Repeat Password
+							Powtórz Hasło
 						</label>
 						<input
 							className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 							type="password"
 							name="password2"
 							id="password2"
-							placeholder="Repeat password..."
+							placeholder="Powtórz hasło..."
 							value={formData.password2}
 							onChange={handleChange}></input>
 					</div>
@@ -125,7 +125,7 @@ export default function Register() {
 							onClick={handleSubmit}
 							type="submit"
 							className="border-2 border-amber-400 bg-amber-400 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-amber-400 font-semibold cursor-pointer">
-							Register
+							Zarejestruj
 						</button>
 					</div>
 				</form>
