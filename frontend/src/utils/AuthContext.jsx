@@ -91,6 +91,12 @@ export const AuthProvider = ({ children }) => {
 			localStorage.removeItem("refreshToken");
 			setLoggedIn(false);
 			setUsername("");
+
+			if ("caches" in window) {
+				caches.delete("bookings-cache").then(() => {
+					console.log("Cache rezerwacji wyczyszczony przy wylogowaniu");
+				});
+			}
 		}
 	};
 
