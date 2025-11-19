@@ -34,7 +34,7 @@ export default defineConfig({
 				runtimeCaching: [
 					{
 						// FILMY - StaleWhileRevalidate
-						urlPattern: /^https?:\/\/127\.0\.0\.1:8000\/api\/movies\/$/i,
+						urlPattern: /^https?:\/\/.*\/api\/movies\/$/i,
 						handler: "StaleWhileRevalidate",
 						options: {
 							cacheName: "movies-cache",
@@ -45,26 +45,29 @@ export default defineConfig({
 						},
 					},
 					{
-						// MOJE REZERWACJE - CacheFirst
-						urlPattern:
-							/^https?:\/\/127\.0\.0\.1:8000\/api\/(my-bookings|bookings)\/$/i,
-						handler: "CacheFirst",
+						// ⭐ MOJE REZERWACJE - NetworkFirst (świeże online, cache offline)
+						urlPattern: /^https?:\/\/.*\/api\/(my-bookings|bookings)\/.*$/i,
+						handler: "NetworkFirst",
 						options: {
 							cacheName: "bookings-cache",
+							networkTimeoutSeconds: 3, // Szybki fallback do cache
 							expiration: {
-								maxEntries: 30,
-								maxAgeSeconds: 60 * 60 * 24 * 7, // 7 dni
+								maxEntries: 20,
+								maxAgeSeconds: 60 * 60 * 24 * 7, // 7 dni dla offline
+							},
+							cacheableResponse: {
+								statuses: [0, 200], // Cache tylko OK responses
 							},
 						},
 					},
 					{
 						// SEANSE I MIEJSCA - NetworkFirst
 						urlPattern:
-							/^https?:\/\/127\.0\.0\.1:8000\/api\/(screenings|movies\/\d+\/screenings).*$/i,
+							/^https?:\/\/.*\/api\/(screenings|movies\/\d+\/screenings).*$/i,
 						handler: "NetworkFirst",
 						options: {
 							cacheName: "screenings-cache",
-							networkTimeoutSeconds: 3, // Po 3 sek pokazuje cache
+							networkTimeoutSeconds: 3,
 							expiration: {
 								maxEntries: 50,
 								maxAgeSeconds: 60 * 30, // 30 minut
@@ -73,7 +76,7 @@ export default defineConfig({
 					},
 					{
 						// OBRAZY - CacheFirst
-						urlPattern: /^https?:\/\/127\.0\.0\.1:8000\/media\/.*/i,
+						urlPattern: /^https?:\/\/.*\/media\/.*/i,
 						handler: "CacheFirst",
 						options: {
 							cacheName: "images-cache",
@@ -87,4 +90,35 @@ export default defineConfig({
 			},
 		}),
 	],
+	// --------------------
+	server: {
+		proxy: {
+			"/api": {
+				target: "http://localhost:8000",
+				changeOrigin: true,
+			},
+			"/media": {
+				target: "http://localhost:8000",
+				changeOrigin: true,
+			},
+		},
+	},
+	preview: {
+		allowedHosts: [
+			".ngrok.io",
+			".ngrok-free.dev",
+			".ngrok-free.app",
+			"unapplicably-wackier-debra.ngrok-free.dev",
+		], // DODAJ TO
+		proxy: {
+			"/api": {
+				target: "http://localhost:8000",
+				changeOrigin: true,
+			},
+			"/media": {
+				target: "http://localhost:8000",
+				changeOrigin: true,
+			},
+		},
+	},
 });
