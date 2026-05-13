@@ -148,10 +148,6 @@ Progressive Web App do rezerwacji biletów kinowych. React + Django REST Framewo
 - SimpleJWT
 - Firebase Admin SDK
 
-## 📝 License
-
-MIT
-
 ## 👨‍💻 Author
 
 TheBarr
