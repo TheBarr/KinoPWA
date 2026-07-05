@@ -5,14 +5,21 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
+<<<<<<< HEAD
 		"build": "node generate-sw.js && vite build",
+=======
+		"build": "vite build",
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@tailwindcss/vite": "^4.1.13",
 		"axios": "^1.12.2",
+<<<<<<< HEAD
 		"dotenv": "^17.4.2",
+=======
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 		"firebase": "^12.4.0",
 		"jwt-decode": "^4.0.0",
 		"lucide-react": "^0.544.0",

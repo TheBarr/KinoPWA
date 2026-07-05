@@ -34,7 +34,8 @@ export default function MovieDetails() {
 	const getImageUrl = (imagePath) => {
 		if (!imagePath) return null;
 		if (imagePath.startsWith("http")) return imagePath;
-		return `http://127.0.0.1:8000${imagePath}`;
+
+		return `${import.meta.env.VITE_APP_URL}${imagePath}`;
 	};
 
 	const formatDate = (dateString) => {

@@ -31,7 +31,11 @@ export default function NotificationManager() {
 		if (!messaging) return;
 
 		const unsubscribe = onMessage(messaging, (payload) => {
+<<<<<<< HEAD
 			console.log("Powiadomienie otrzymane:", payload);
+=======
+			console.log("📩 Powiadomienie otrzymane:", payload);
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 
 			if (Notification.permission === "granted") {
 				const title = payload.notification?.title || "Nowe powiadomienie";
@@ -59,12 +63,20 @@ export default function NotificationManager() {
 			// Tylko jeśli użytkownik JUŻ ma pozwolenie
 			if (Notification.permission === "granted") {
 				try {
+<<<<<<< HEAD
 					console.log("Odświeżam token dla nowego użytkownika...");
+=======
+					console.log("🔄 Odświeżam token dla nowego użytkownika...");
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 
 					// Usuń stary token
 					try {
 						await deleteToken(messaging);
+<<<<<<< HEAD
 						console.log("Stary token usunięty");
+=======
+						console.log("🗑️ Stary token usunięty");
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 					} catch (e) {
 						console.log("Brak starego tokena");
 					}
@@ -76,10 +88,17 @@ export default function NotificationManager() {
 						await apiClient.post("/notifications/register/", {
 							fcm_token: token,
 						});
+<<<<<<< HEAD
 						console.log("Token automatycznie odświeżony");
 					}
 				} catch (error) {
 					console.error("Błąd odświeżania tokena:", error);
+=======
+						console.log("✅ Token automatycznie odświeżony");
+					}
+				} catch (error) {
+					console.error("❌ Błąd odświeżania tokena:", error);
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 				}
 			}
 		};
@@ -90,18 +109,30 @@ export default function NotificationManager() {
 	const enableNotifications = async () => {
 		try {
 			if (!messaging) {
+<<<<<<< HEAD
 				alert("Powiadomienia nie są wspierane");
+=======
+				alert("❌ Powiadomienia nie są wspierane");
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 				setShowBanner(false);
 				return;
 			}
 
 			// Poproś o pozwolenie
 			const permission = await Notification.requestPermission();
+<<<<<<< HEAD
 			console.log("Status pozwolenia:", permission);
 
 			if (permission !== "granted") {
 				alert(
 					"Zablokowano powiadomienia. Włącz je w ustawieniach przeglądarki."
+=======
+			console.log("📱 Status pozwolenia:", permission);
+
+			if (permission !== "granted") {
+				alert(
+					"❌ Zablokowano powiadomienia. Włącz je w ustawieniach przeglądarki."
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 				);
 				setShowBanner(false);
 				return;
@@ -110,14 +141,22 @@ export default function NotificationManager() {
 			// Usuń stary token (jeśli istnieje)
 			try {
 				await deleteToken(messaging);
+<<<<<<< HEAD
 				console.log("Stary token usunięty");
+=======
+				console.log("🗑️ Stary token usunięty");
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 			} catch (e) {
 				console.log("Brak starego tokena");
 			}
 
 			// Pobierz nowy token
 			const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+<<<<<<< HEAD
 			console.log("Nowy token FCM:", token.substring(0, 20) + "...");
+=======
+			console.log("🔑 Nowy token FCM:", token.substring(0, 20) + "...");
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 
 			if (!token) {
 				throw new Error("Nie udało się pobrać tokena");
@@ -128,17 +167,28 @@ export default function NotificationManager() {
 				fcm_token: token,
 			});
 
+<<<<<<< HEAD
 			console.log("Token zapisany w bazie");
 
 			// Pokaż testowe powiadomienie
 			new Notification("Powiadomienia włączone!", {
+=======
+			console.log("✅ Token zapisany w bazie");
+
+			// Pokaż testowe powiadomienie
+			new Notification("✅ Powiadomienia włączone!", {
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 				body: "Będziesz otrzymywać przypomnienia o seansach",
 				icon: "/pwa-192x192.png",
 			});
 
 			setShowBanner(false);
 		} catch (error) {
+<<<<<<< HEAD
 			console.error("Błąd:", error);
+=======
+			console.error("❌ Błąd:", error);
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
 			alert(`Błąd: ${error.message}`);
 		}
 	};

@@ -5,6 +5,10 @@ django-cors-headers
 Pillow
 firebase-admin
 python-dotenv
+<<<<<<< HEAD
 gunicorn
 psycopg2-binary==2.9.9
 whitenoise
+=======
+psycopg2-binary
+>>>>>>> 32da2c3bc94f701fad1d7cf9c4054d323c7913f1
