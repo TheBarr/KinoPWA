@@ -16,5 +16,7 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path("user/", UserInfoAPIView.as_view(), name="user-info"),
     path("my-bookings/", MyBookingsListView.as_view(), name="my-bookings"),
+    path("notifications/register/", RegisterFCMTokenView.as_view(), name="register-fcm-token"),
+    path('notifications/status/', notification_status, name='notification-status'),
     path('', include(router.urls)),
 ]

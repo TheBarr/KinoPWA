@@ -7,11 +7,6 @@ const Header = () => {
 			<Logo />
 			<Nav />
 		</header>
-
-		// <header className="sticky top-0 z-20 mx-auto flex w-full items-center justify-between bg-gray-700 p-1 flex-wrap">
-		// 	<Logo />
-		// 	<Nav />
-		// </header>
 	);
 };
 

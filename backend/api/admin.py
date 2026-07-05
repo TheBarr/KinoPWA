@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import CustomUser, Movie, Seat, Screening, Booking
+from .models import CustomUser, Movie, Seat, Screening, Booking, FCMToken
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
-
 
 @admin.register(CustomUser)
 class CustomAdminUser(UserAdmin):
@@ -58,3 +57,8 @@ class BookingAdmin(admin.ModelAdmin):
     list_display = ['user', 'screening', 'seat', 'status', 'booking_time']
     list_filter = ['status', 'booking_time']
     search_fields = ['user__email', 'screening__movie__title']
+
+@admin.register(FCMToken)
+class FCMTokenAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_at', 'updated_at']
+    search_fields = ['user__email']

@@ -70,7 +70,7 @@ export default function Home() {
 	// Widok dla NIEZALOGOWANYCH użytkowników
 	if (!isLoggedIn) {
 		return (
-			<div className="min-h-screen flex items-center justify-center px-4">
+			<div className="min-h-[calc(100vh-136px)] flex items-center justify-center px-4">
 				<div className="max-w-2xl text-center">
 					<div className="mb-8">
 						<h1 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 mb-4">
@@ -144,12 +144,12 @@ export default function Home() {
 	// Widok dla ZALOGOWANYCH użytkowników
 
 	return (
-		<div className="min-h-screen">
-			{/* Hero Section */}
+		<div className="min-h-[calc(100vh-136px)]">
+			{/* Sekcja logo*/}
 			<section className="relative h-[500px] flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-transparent">
 				<div className="relative text-center px-4 z-10">
 					<h1 className="text-6xl md:text-7xl font-bold text-amber-400 mb-4 drop-shadow-[0_0_30px_rgba(251,191,36,0.5)]">
-						MOVIE TICKET
+						CINEMA TICKETS
 					</h1>
 					<p className="text-xl md:text-2xl text-gray-300 mb-8">
 						Twoje kino online - rezerwuj bilety w mgnieniu oka

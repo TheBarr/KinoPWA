@@ -1,4 +1,4 @@
-from .models import CustomUser, Movie, Screening, Seat, Booking
+from .models import CustomUser, Movie, Screening, Seat, Booking, FCMToken
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -60,6 +60,7 @@ class MovieSerializer(serializers.ModelSerializer):
                 return obj.image.url
         return None
     
+
 #-------------------------------------------------------------------------- miejsca
 
 class SeatSerializer(serializers.ModelSerializer):
@@ -121,7 +122,29 @@ class CreateBookingSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         booking = Booking.objects.create(
             user=user,
-            status='confirmed',  
+            status='confirmed',
             **validated_data
         )
+        
+        from .notifications import send_booking_confirmation
+        try:
+            send_booking_confirmation(booking)
+        except Exception as e:
+            print(f"Błąd wysyłania powiadomienia: {e}")
+        
         return booking
+    
+class FCMTokenSerializer(serializers.Serializer):
+    fcm_token = serializers.CharField(max_length=500)
+    
+    def create(self, validated_data):
+        user = self.context['request'].user
+        token = validated_data['fcm_token']
+        
+        # Update or create
+        fcm_token_obj, created = FCMToken.objects.update_or_create(
+            user=user,
+            defaults={'token': token}
+        )
+        
+        return fcm_token_obj
