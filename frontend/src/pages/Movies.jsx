@@ -8,6 +8,8 @@ const Movies = () => {
 	const [error, setError] = useState(null);
 	const navigate = useNavigate();
 
+	const PLACEHOLDER = '/assets/images/no_image.jpg';
+
 	useEffect(() => {
 		const fetchMovies = async () => {
 			setLoading(true);
@@ -16,7 +18,7 @@ const Movies = () => {
 				const response = await apiClient.get("/movies/");
 				setMovies(response.data);
 				setLoading(false);
-			} catch (err) {
+			} catch {
 				setError("Nie udało się pobrać filmów");
 				setLoading(false);
 			} finally {

@@ -4,6 +4,7 @@ import apiClient from "../utils/axiosConfig";
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
 	const context = useContext(AuthContext);
 	if (!context) {
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 				setLoggedIn(false);
 				setUsername("");
 			}
-		} catch (error) {
+		} catch  {
 			const token = localStorage.getItem("accessToken");
 			if (token) {
 				const savedUsername = localStorage.getItem("username");

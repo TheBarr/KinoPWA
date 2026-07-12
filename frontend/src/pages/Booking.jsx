@@ -177,7 +177,7 @@ export default function BookingPage() {
 						<button
 							onClick={() => {
 								setSelectedScreening(null);
-								setSelectedSeat(null);
+								setSelectedSeats(null);
 							}}
 							className="text-amber-400 hover:text-amber-300">
 							Zmień seans

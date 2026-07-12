@@ -65,7 +65,7 @@ export default function NotificationManager() {
 					try {
 						await deleteToken(messaging);
 						console.log("Stary token usunięty");
-					} catch (e) {
+					} catch {
 						console.log("Brak starego tokena");
 					}
 
@@ -111,7 +111,7 @@ export default function NotificationManager() {
 			try {
 				await deleteToken(messaging);
 				console.log("Stary token usunięty");
-			} catch (e) {
+			} catch {
 				console.log("Brak starego tokena");
 			}
 
