@@ -226,12 +226,9 @@ pip-selfcheck.json
 **/.firebaserc
 firebase-credentials.json
 firebase-messaging-sw.js
-config.js
 
 ### Firebase Patch ###
 .runtimeconfig.json
-.firebase/
-
 
 # PWA
 public/firebase-messaging-sw.js
