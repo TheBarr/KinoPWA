@@ -1,0 +1,32 @@
+name: CI Pipeline (Budowanie i Testy)
+
+on:
+  push:
+    branches: [ "main" ] 
+  pull_request:
+    branches: [ "main" ] 
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: 1. Pobranie najnowszego kodu
+      uses: actions/checkout@v4
+
+    - name: 2. Generowanie atrap plików .env
+      run: |
+        touch ./backend/.env
+        touch ./frontend/.env
+        
+        echo "VITE_FIREBASE_API_KEY=test_key" >> ./frontend/.env
+        echo "VITE_FIREBASE_PROJECT_ID=test_id" >> ./frontend/.env
+
+    - name: 3. Weryfikacja jakości kodu (ESLint)
+      working-directory: ./frontend
+      run: |
+        npm install
+        npm run lint --if-present
+
+    - name: 4. Próba generalna budowania Dockera
+      run: docker compose build
